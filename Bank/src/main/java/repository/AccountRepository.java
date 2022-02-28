@@ -2,6 +2,7 @@ package repository;
 
 import entity.Account;
 import entity.enumoration.TypeAccount;
+import org.hibernate.SessionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,23 +13,14 @@ import java.util.List;
 
 public class AccountRepository implements Repository<Account> {
     private Connection connection = Singleton.getInstance().getConnection();;
+    private final SessionFactory sessionFactory = SessionFactorySingleton.getInstance();
 
-    //::::>
     public AccountRepository() throws SQLException, ClassNotFoundException {
-        String createTable ="CREATE TABLE IF NOT EXISTS " +
-                "Account(id serial," +
-                "codeBranch varchar(50) REFERENCES BankBranch(codeBranch)," +
-                "nationalId varchar(50) REFERENCES Customer(nationalId)," +
-                "accountnumber varchar(50) PRIMARY KEY," +
-                "budget DECIMAL, " +
-                "status varchar(50))";
-        PreparedStatement preparedStatement = connection.prepareStatement(createTable);
-        preparedStatement.execute();
     }
 
     @Override
     public int add(Account account) throws SQLException {
-        String insertAccount = " INSERT INTO Account(codeBranch,nationalId,accountnumber,budget,status) VALUES (?, ?, ?, ?, ?)";
+        String insertAccount = " INSERT INTO Account(codeBranch,nationalId,accountnumber,budget,TypeAccount) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertAccount);
         preparedStatement.setString(1,account.getCodeBranch());
         preparedStatement.setString(2,account.getNationalId());
@@ -56,7 +48,7 @@ public class AccountRepository implements Repository<Account> {
         preparedStatement.setString(1,nationalId);
         ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                if ((resultSet.getString("status").equals("ACTIVE"))) {
+                if ((resultSet.getString("TypeAccount").equals("ACTIVE"))) {
                     System.out.print(resultSet.getInt("id") + ": ");
                     System.out.println(resultSet.getString("accountnumber"));
                 }
@@ -112,7 +104,7 @@ public class AccountRepository implements Repository<Account> {
             account.setNationalId(resultSet.getString("nationalId"));
             account.setAccountNumber(resultSet.getString("accountnumber"));
             account.setBudget(resultSet.getDouble("budget"));
-            account.setTypeAccount(TypeAccount.valueOf(resultSet.getString("status")));
+            account.setTypeAccount(String.valueOf(TypeAccount.valueOf(resultSet.getString("TypeAccount"))));
             accountList.add(account);
         }
         return accountList;
@@ -124,14 +116,14 @@ public class AccountRepository implements Repository<Account> {
         preparedStatement.setString(1,accountNumber);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        if(resultSet.getString("status").equals("ACTIVE"))
+        if(resultSet.getString("TypeAccount").equals("ACTIVE"))
             return true;
         else
             return false;
     }
 
     public void setInactiveAccount(String accountNumber) throws SQLException {
-        String update = "UPDATE Account SET status = ? WHERE accountnumber = ? ";
+        String update = "UPDATE Account SET TypeAccount = ? WHERE accountnumber = ? ";
         PreparedStatement preparedStatement = connection.prepareStatement(update);
         preparedStatement.setString(1,"INACTIVE");
         preparedStatement.setString(2,accountNumber);

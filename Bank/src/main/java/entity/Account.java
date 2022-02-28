@@ -30,7 +30,7 @@ public class Account {
     private String accountNumber;
 
     private Double budget;
-    private TypeAccount typeAccount;
+    private String typeAccount;
 
 
     @Override

@@ -51,7 +51,7 @@ public class AccountService {
         }
         System.out.print("Enter budget:");
         budget = input.nextDouble();
-        Account newAccount = new Account(null,codeBranch,nationalId,number,budget, TypeAccount.ACTIVE);
+        Account newAccount = new Account(null,codeBranch,nationalId,number,budget, String.valueOf(TypeAccount.ACTIVE));
         accountRepository.add(newAccount);
         return 1;
     }
