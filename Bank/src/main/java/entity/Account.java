@@ -20,10 +20,10 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false,length = 4,unique = true)
+    @Column(nullable = false,length = 4)
     private String codeBranch;
 
-    @Column(nullable = false,length = 10,unique = true)
+    @Column(nullable = false,length = 10)
     private String nationalId;
 
     @Column(nullable = false,unique = true)
