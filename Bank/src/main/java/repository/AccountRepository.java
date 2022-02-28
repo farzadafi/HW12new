@@ -104,7 +104,7 @@ public class AccountRepository implements Repository<Account> {
             account.setNationalId(resultSet.getString("nationalId"));
             account.setAccountNumber(resultSet.getString("accountnumber"));
             account.setBudget(resultSet.getDouble("budget"));
-            account.setTypeAccount(String.valueOf(TypeAccount.valueOf(resultSet.getString("TypeAccount"))));
+            account.setTypeAccount(TypeAccount.valueOf(resultSet.getString("TypeAccount")));
             accountList.add(account);
         }
         return accountList;

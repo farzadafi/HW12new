@@ -30,7 +30,9 @@ public class Account {
     private String accountNumber;
 
     private Double budget;
-    private String typeAccount;
+
+    @Enumerated(EnumType.STRING)
+    private TypeAccount typeAccount;
 
 
     @Override
