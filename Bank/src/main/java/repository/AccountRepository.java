@@ -18,16 +18,19 @@ public class AccountRepository implements Repository<Account> {
     public AccountRepository() throws SQLException, ClassNotFoundException {
     }
 
-    @Override
-    public int add(Account account) throws SQLException {
-        String insertAccount = " INSERT INTO Account(codeBranch,nationalId,accountnumber,budget,TypeAccount) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(insertAccount);
-        preparedStatement.setString(1,account.getCodeBranch());
-        preparedStatement.setString(2,account.getNationalId());
-        preparedStatement.setString(3,account.getAccountNumber());
-        preparedStatement.setDouble(4,account.getBudget());
-        preparedStatement.setString(5, String.valueOf(account.getTypeAccount()));
-        return preparedStatement.executeUpdate();
+
+    public int add(Account account){
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.save(account);
+                transaction.commit();
+                return account.getId();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
     }
 
     @Override
