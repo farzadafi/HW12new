@@ -1,62 +1,37 @@
 package entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+
 
 import entity.enumoration.TypeAccount;
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "Account")
 public class Account {
-    private String codeBranch,nationalId,accountNumber;
-    Double budget;
-    TypeAccount typeAccount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    public Account(String codeBranch, String nationalId, String accountNumber, Double budget,TypeAccount typeAccount) {
-        this.codeBranch = codeBranch;
-        this.nationalId = nationalId;
-        this.accountNumber = accountNumber;
-        this.budget = budget;
-        this.typeAccount = typeAccount;
-    }
+    @Column(nullable = false,length = 4,unique = true)
+    private String codeBranch;
 
-    public Account() {
-    }
+    @Column(nullable = false,length = 10,unique = true)
+    private String nationalId;
 
-    public String getCodeBranch() {
-        return codeBranch;
-    }
+    @Column(nullable = false,unique = true)
+    private String accountNumber;
 
-    public String getNationalId() {
-        return nationalId;
-    }
+    private Double budget;
+    private TypeAccount typeAccount;
 
-    public String getAccountNumber() {
-        return accountNumber;
-    }
-
-    public Double getBudget() {
-        return budget;
-    }
-
-    public TypeAccount getTypeAccount() {
-        return typeAccount;
-    }
-
-    public void setCodeBranch(String codeBranch) {
-        this.codeBranch = codeBranch;
-    }
-
-    public void setNationalId(String nationalId) {
-        this.nationalId = nationalId;
-    }
-
-    public void setAccountNumber(String accountNumber) {
-        this.accountNumber = accountNumber;
-    }
-
-    public void setBudget(Double budget) {
-        this.budget = budget;
-    }
-
-    public void setTypeAccount(TypeAccount typeAccount) {
-        this.typeAccount = typeAccount;
-    }
 
     @Override
     public String toString() {
