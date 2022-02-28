@@ -22,14 +22,14 @@ public class CustomerRepository implements Repository<Customer> {
     }
 
     @Override
-    public void add(Customer customer) throws SQLException {
+    public int add(Customer customer) throws SQLException {
         String insertCustomer = " INSERT INTO Customer(fullName,nationalId,codeBranch,password) VALUES (?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertCustomer);
         preparedStatement.setString(1,customer.getFullName());
         preparedStatement.setString(2,customer.getNationalId());
         preparedStatement.setString(3,customer.getCodeBranch());
         preparedStatement.setString(4,customer.getPassword());
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     @Override

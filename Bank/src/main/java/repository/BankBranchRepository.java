@@ -23,7 +23,7 @@ public class BankBranchRepository implements Repository<BankBranch> {
     }
 
     @Override
-    public void add(BankBranch bankBranch) throws SQLException {
+    public int add(BankBranch bankBranch) throws SQLException {
         String insertBank = "INSERT INTO BankBranch (nameBank,codeBranch,BossfullName,nationalId,password) VALUES (?, ?, ?, ?, ?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(insertBank);
         preparedStatement.setString(1,bankBranch.getNameBank());
@@ -31,7 +31,7 @@ public class BankBranchRepository implements Repository<BankBranch> {
         preparedStatement.setString(3,bankBranch.getBossFullName());
         preparedStatement.setString(4,bankBranch.getNationalId());
         preparedStatement.setString(5,bankBranch.getPassword());
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     @Override

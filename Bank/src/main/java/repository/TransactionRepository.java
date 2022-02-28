@@ -25,7 +25,7 @@ public class TransactionRepository implements Repository<Transaction> {
 
 
     @Override
-    public void add(Transaction transaction) throws SQLException {
+    public int add(Transaction transaction) throws SQLException {
         String insertTransaction = "INSERT INTO TransactionTable (accountnumber,originCardNumber,destinationCardNumber,amount,dateT,timeT,typeTransaction) VALUES (?, ?, ?, ?, ?, ?, ?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(insertTransaction);
         preparedStatement.setString(1,transaction.getAccountNumber());
@@ -35,7 +35,7 @@ public class TransactionRepository implements Repository<Transaction> {
         preparedStatement.setDate(5,transaction.getDate());
         preparedStatement.setTime(6,transaction.getTime());
         preparedStatement.setString(7, String.valueOf(transaction.getTypeTransaction()));
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     public List<Transaction> findAllTransaction(String accountNumber, Date date) throws SQLException {

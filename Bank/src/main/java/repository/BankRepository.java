@@ -18,11 +18,11 @@ public class BankRepository implements Repository<Bank>{
     }
 
     //::::>
-    public void add(Bank bank) throws SQLException {
+    public int add(Bank bank) throws SQLException {
         String insertBank = "INSERT INTO Bank (nameBank) VALUES (?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(insertBank);
         preparedStatement.setString(1,bank.getName());
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     //::::>

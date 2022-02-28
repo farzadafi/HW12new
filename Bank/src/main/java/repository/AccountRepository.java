@@ -27,7 +27,7 @@ public class AccountRepository implements Repository<Account> {
     }
 
     @Override
-    public void add(Account account) throws SQLException {
+    public int add(Account account) throws SQLException {
         String insertAccount = " INSERT INTO Account(codeBranch,nationalId,accountnumber,budget,status) VALUES (?, ?, ?, ?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(insertAccount);
         preparedStatement.setString(1,account.getCodeBranch());
@@ -35,7 +35,7 @@ public class AccountRepository implements Repository<Account> {
         preparedStatement.setString(3,account.getAccountNumber());
         preparedStatement.setDouble(4,account.getBudget());
         preparedStatement.setString(5, String.valueOf(account.getTypeAccount()));
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     @Override
