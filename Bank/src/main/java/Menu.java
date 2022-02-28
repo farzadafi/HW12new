@@ -1,5 +1,5 @@
-import Entity.Bank;
-import Service.*;
+import entity.Bank;
+import service.*;
 
 import java.sql.SQLException;
 import java.util.Scanner;
