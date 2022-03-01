@@ -39,16 +39,18 @@ class AccountRepositoryTest {
         assertNotNull(sessionFactory);
     }
 
+    @BeforeEach
+    public void addAccount(){
+        accountRepository.add(account);
+    }
+
 
     @Test
     public void testAdd() {
-        int result = accountRepository.add(account);
 
-        assertNotEquals(0,result);
         Account account1 = accountRepository.findByAccountNumber(account.getAccountNumber());
         assertAll(
                 () -> assertNotEquals(0,account1.getId()),
-                () -> assertEquals(result,account1.getId()),
                 () -> assertNotNull(account1),
                 () -> assertEquals("1111",account1.getCodeBranch())
         );
@@ -56,9 +58,8 @@ class AccountRepositoryTest {
 
     @Test
     public void testUpdate() {
-        int result = accountRepository.add(account);
 
-        Account account1 = new Account(result,"2222","2222222222","22222",222D,TypeAccount.ACTIVE);
+        Account account1 = new Account(account.getId(),"2222","2222222222","22222",222D,TypeAccount.ACTIVE);
         accountRepository.update(account1);
         Account account2 = accountRepository.findByAccountNumber(account1.getAccountNumber());
 
@@ -67,7 +68,6 @@ class AccountRepositoryTest {
 
     @Test
     public void testFindById() {
-        accountRepository.add(account);
 
         String numberAccount =  accountRepository.findById(account.getId());
 
@@ -80,7 +80,6 @@ class AccountRepositoryTest {
 
     @Test
     public void testFindByAccountNumber(){
-        accountRepository.add(account);
 
         Account newAccount = accountRepository.findByAccountNumber(account.getAccountNumber());
 
