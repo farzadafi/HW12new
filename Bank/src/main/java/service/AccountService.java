@@ -77,7 +77,7 @@ public class AccountService {
     }
 
     public String returnAccountNumber(int id) throws SQLException {
-        return accountRepository.returnAccountNumber(id);
+        return accountRepository.findById(id);
     }
 
     public String returnAmount(String accountNumber) throws SQLException {

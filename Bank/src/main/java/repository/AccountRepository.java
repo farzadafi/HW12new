@@ -35,14 +35,29 @@ public class AccountRepository implements Repository<Account> {
         }
     }
 
+    public String findById(int id){
+        try (var session = sessionFactory.openSession()) {
+            Account account = session.find(Account.class,id);
+            if(account == null )
+                return null;
+            else
+                return account.getAccountNumber();
+        }
+    }
+
     public int find(String accountNumber) {
         try (var session = sessionFactory.openSession()) {
             var query = session.createSQLQuery("SELECT * FROM Account WHERE accountnumber = :accountNumber");
             query.addEntity(Account.class);
             query.setParameter("accountNumber",accountNumber);
-            List account = query.list();
+            List account = null;
+            try {
+                account = query.list();
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
 
-            if(account.size() == 0 ) {
+            if( account == null || account.size() == 0 ) {
                 System.out.println("This account is not found!");
                 return 0;
             }
@@ -54,16 +69,7 @@ public class AccountRepository implements Repository<Account> {
     }
 
 
-    public String returnAccountNumber(int id) throws SQLException {
-        String returnNumber = "SELECT * FROM Account WHERE id = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(returnNumber);
-        preparedStatement.setInt(1,id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        if(resultSet.next())
-            return resultSet.getString("accountnumber");
-        else
-            return "null";
-    }
+
 
     public String returnAmount(String accountNumber) throws SQLException {
         String returnAmount = "SELECT * FROM Account WHERE accountnumber = ? ";
