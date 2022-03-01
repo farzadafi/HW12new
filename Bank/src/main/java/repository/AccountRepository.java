@@ -2,10 +2,9 @@ package repository;
 
 import entity.Account;
 import entity.enumoration.TypeAccount;
-import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 
-import javax.persistence.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,9 +44,11 @@ public class AccountRepository implements Repository<Account> {
         }
     }
 
-    public int find(String accountNumber) {
+
+
+    public Account findByAccountNumber(String accountNumber) {
         try (var session = sessionFactory.openSession()) {
-            var query = session.createSQLQuery("SELECT * FROM Account WHERE accountnumber = :accountNumber");
+            NativeQuery query = session.createSQLQuery("SELECT * FROM Account WHERE accountnumber = :accountNumber");
             query.addEntity(Account.class);
             query.setParameter("accountNumber",accountNumber);
             List account = null;
@@ -58,27 +59,18 @@ public class AccountRepository implements Repository<Account> {
             }
 
             if( account == null || account.size() == 0 ) {
-                System.out.println("This account is not found!");
-                return 0;
+                return null;
             }
             else {
-                System.out.println("This account is found!");
-                return 1;
+                return (Account) account.get(0);
             }
         }
     }
 
-
-
-
-    public String returnAmount(String accountNumber) throws SQLException {
-        String returnAmount = "SELECT * FROM Account WHERE accountnumber = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(returnAmount);
-        preparedStatement.setString(1,accountNumber);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        return resultSet.getString("budget");
+    public int find(String input){
+        return 0;
     }
+
 
     public void depositCard(Double amount,String accountNumber) throws SQLException {
         String deposit = "UPDATE Account SET budget = budget-? WHERE accountnumber = ? ";
