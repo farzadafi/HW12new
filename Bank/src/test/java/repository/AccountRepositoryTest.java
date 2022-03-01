@@ -54,18 +54,16 @@ class AccountRepositoryTest {
         );
     }
 
-    /*
     @Test
     public void testUpdate() {
         int result = accountRepository.add(account);
 
-        Account account1 = new Account(result,"2222","2222222222","22222",222D);
-        accountRepository.edit(account1);
-        Account account2 = accountRepository.findById(result);
+        Account account1 = new Account(result,"2222","2222222222","22222",222D,TypeAccount.ACTIVE);
+        accountRepository.update(account1);
+        Account account2 = accountRepository.findByAccountNumber(account1.getAccountNumber());
 
         assertEquals("2222",account2.getCodeBranch());
     }
-     */
 
     /*
     @Test
