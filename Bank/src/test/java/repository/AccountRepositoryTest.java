@@ -8,6 +8,8 @@ import org.junit.jupiter.api.*;
 import repository.AccountRepository;
 import repository.SessionFactorySingleton;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccountRepositoryTest {
@@ -76,6 +78,18 @@ class AccountRepositoryTest {
 
     @Test
     public void testList() {
+        Account account1 = new Account(null,"1112","1111111111","11112",111D, TypeAccount.ACTIVE);
+        Account account2 = new Account(null,"1113","1111111111","11113",111D, TypeAccount.ACTIVE);
+
+        accountRepository.add(account1);
+        accountRepository.add(account2);
+
+        List<Account> accountList = accountRepository.showAllAccount(account.getNationalId());
+        accountRepository.delete(account1);
+        accountRepository.delete(account2);
+
+        if(accountList.size() < 3 )
+            fail();
     }
 
     @Test
