@@ -47,13 +47,6 @@ public class CreditCardService {
             System.out.println("you enter a wrong national id!");
             return 0;
         }
-        System.out.println( name + " have this account :");
-        int result = accountService.showAccount(nationalId);
-        if( result == 0 ){
-            System.out.println(name + " unfortunately doesn't have any active account!");
-            return 0;
-        }
-
         System.out.print("Enter number's account for add card:");
         int number = input.nextInt();
         input.nextLine();

@@ -72,10 +72,6 @@ public class AccountService {
         }
     }
 
-    public int showAccount(String nationalId) throws SQLException {
-        return accountRepository.showAccount(nationalId);
-    }
-
     public int findAccountNumber(String number) throws SQLException {
         return accountRepository.find(number);
     }
