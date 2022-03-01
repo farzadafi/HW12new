@@ -65,17 +65,14 @@ class AccountRepositoryTest {
         assertEquals("2222",account2.getCodeBranch());
     }
 
-    /*
     @Test
     public void testFindById() {
         accountRepository.add(account);
 
-        Account account1 =  accountRepository.findById(account.getId());
+        String numberAccount =  accountRepository.findById(account.getId());
 
-        assertEquals("1111",account1.getCodeBranch());
-        assertEquals("1111111111",account1.getNationalId());
+        assertEquals("11111",numberAccount);
     }
-     */
 
     @Test
     public void testList() {
