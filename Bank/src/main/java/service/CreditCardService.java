@@ -51,7 +51,7 @@ public class CreditCardService {
         int number = input.nextInt();
         input.nextLine();
         accountNumber = accountService.returnAccountNumber(number);
-        if ( accountService.findAccountNumber(accountNumber) == 0 ){
+        if ( accountService.findAccountNumber(accountNumber) == null ){
             System.out.println("this account number is not define!");
             return 0;
         }
@@ -185,7 +185,8 @@ public class CreditCardService {
         Date date = Date.valueOf(tempDate);
         LocalTime tempTime = LocalTime.now();
         Time time = Time.valueOf(tempTime);
-        String amountAccount = accountService.returnAmount(accountNumber);
+        Account account = accountService.findAccountNumber(accountNumber);
+        String amountAccount = String.valueOf(account.getBudget());
         System.out.println("You have " + amountAccount + " in this account");
         System.out.print("How much do you want to Transfer(600 for Transfer fee):");
         amount = input.nextDouble();
