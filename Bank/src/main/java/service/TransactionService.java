@@ -33,7 +33,7 @@ public class TransactionService {
         }
         System.out.print("Enter account number for view your Transaction:");
         accountNumber = input.nextLine();
-        if ( accountService.findAccountNumber(accountNumber) == 0){
+        if ( accountService.findAccountNumber(accountNumber) == null){
             System.out.println("This account number is not define before!");
             return;
         }
