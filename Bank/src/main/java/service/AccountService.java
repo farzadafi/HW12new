@@ -72,16 +72,12 @@ public class AccountService {
         }
     }
 
-    public int findAccountNumber(String number) throws SQLException {
-        return accountRepository.find(number);
+    public Account findAccountNumber(String number) throws SQLException {
+        return accountRepository.findByAccountNumber(number);
     }
 
     public String returnAccountNumber(int id) throws SQLException {
         return accountRepository.findById(id);
-    }
-
-    public String returnAmount(String accountNumber) throws SQLException {
-        return accountRepository.returnAmount(accountNumber);
     }
 
     public void depositCard(Double amount,String accountNumber) throws SQLException {
@@ -144,7 +140,7 @@ public class AccountService {
         }
         System.out.print("Enter the account number for INACTIVE:");
         accountNumber = input.nextLine();
-        if(accountRepository.find(accountNumber) == 0 ){
+        if(accountRepository.findByAccountNumber(accountNumber) == null ){
             System.out.println("You enter a wrong account Number!");
             return;
         }
@@ -218,7 +214,7 @@ public class AccountService {
         }
         System.out.print("Enter the account number for INACTIVE:");
         accountNumber = input.nextLine();
-        if(accountRepository.find(accountNumber) == 0 ){
+        if(accountRepository.findByAccountNumber(accountNumber) == null ){
             System.out.println("You enter a wrong account Number!");
             return;
         }
