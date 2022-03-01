@@ -4,20 +4,10 @@ import entity.Account;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class AccountRepository implements Repository<Account> {
-    private Connection connection = Singleton.getInstance().getConnection();;
     private final SessionFactory sessionFactory = SessionFactorySingleton.getInstance();
-
-    public AccountRepository() throws SQLException, ClassNotFoundException {
-    }
-
 
     public int add(Account account){
         try (var session = sessionFactory.openSession()) {
@@ -96,16 +86,6 @@ public class AccountRepository implements Repository<Account> {
             return account;
         }
     }
-
-    public void setInactiveAccount(String accountNumber) throws SQLException {
-        String update = "UPDATE Account SET TypeAccount = ? WHERE accountnumber = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(update);
-        preparedStatement.setString(1,"INACTIVE");
-        preparedStatement.setString(2,accountNumber);
-        preparedStatement.executeUpdate();
-    }
-
-
 
 }
 

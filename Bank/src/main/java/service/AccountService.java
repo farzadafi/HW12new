@@ -145,7 +145,9 @@ public class AccountService {
             System.out.println("You enter a wrong account Number!");
             return;
         }
-        accountRepository.setInactiveAccount(accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        account.setTypeAccount(TypeAccount.INACTIVE);
+        accountRepository.update(account);
         System.out.println("This account seccessful inactived!");
     }
 
@@ -221,7 +223,10 @@ public class AccountService {
             System.out.println("You enter a wrong account Number!");
             return;
         }
-        accountRepository.setInactiveAccount(accountNumber);
+        //accountRepository.setInactiveAccount(accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        account.setTypeAccount(TypeAccount.INACTIVE);
+        accountRepository.update(account);
         System.out.println("This account seccessful inactived!");
     }
 
