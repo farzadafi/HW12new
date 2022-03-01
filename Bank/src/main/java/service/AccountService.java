@@ -112,7 +112,11 @@ public class AccountService {
     }
 
     public boolean checkAccount(String numberAccount) throws SQLException {
-        return accountRepository.checkAccount(numberAccount);
+        Account account = accountRepository.findByAccountNumber(numberAccount);
+        if(account.getTypeAccount() == TypeAccount.ACTIVE)
+            return true;
+        else
+            return false;
     }
 
     public void setInactiveAccount() throws SQLException {
@@ -163,7 +167,7 @@ public class AccountService {
         showAccountForCustomer(nationalId);
         System.out.print("Enter account number for deposit money:");
         accountNumber = input.nextLine();
-        if(!accountRepository.checkAccount(accountNumber)){
+        if(!checkAccount(accountNumber)){
             System.out.println("you enter a wrong account number!");
             return;
         }

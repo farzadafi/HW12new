@@ -97,18 +97,6 @@ public class AccountRepository implements Repository<Account> {
         }
     }
 
-    public boolean checkAccount(String accountNumber) throws SQLException {
-        String check = "SELECT * FROM Account WHERE accountnumber = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(check);
-        preparedStatement.setString(1,accountNumber);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        if(resultSet.getString("TypeAccount").equals("ACTIVE"))
-            return true;
-        else
-            return false;
-    }
-
     public void setInactiveAccount(String accountNumber) throws SQLException {
         String update = "UPDATE Account SET TypeAccount = ? WHERE accountnumber = ? ";
         PreparedStatement preparedStatement = connection.prepareStatement(update);
