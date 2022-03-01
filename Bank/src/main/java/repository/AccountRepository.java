@@ -1,7 +1,6 @@
 package repository;
 
 import entity.Account;
-import entity.enumoration.TypeAccount;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
 
@@ -82,22 +81,20 @@ public class AccountRepository implements Repository<Account> {
         return 0;
     }
 
-    public List<Account> showAllAccount(String nationalId) throws SQLException {
-        String show = "SELECT * FROM Account WHERE nationalId = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(show);
-        preparedStatement.setString(1,nationalId);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        List<Account> accountList = new ArrayList<>();
-        while(resultSet.next()){
-            Account account = new Account();
-            account.setCodeBranch(resultSet.getString("codeBranch"));
-            account.setNationalId(resultSet.getString("nationalId"));
-            account.setAccountNumber(resultSet.getString("accountnumber"));
-            account.setBudget(resultSet.getDouble("budget"));
-            account.setTypeAccount(TypeAccount.valueOf(resultSet.getString("TypeAccount")));
-            accountList.add(account);
+
+    public List<Account> showAllAccount(String nationalId){
+        try (var session = sessionFactory.openSession()) {
+            NativeQuery query = session.createSQLQuery("SELECT * FROM Account WHERE nationalid = :nationalId");
+            query.addEntity(Account.class);
+            query.setParameter("nationalId", nationalId);
+            List account = null;
+            try {
+                account = query.list();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            return account;
         }
-        return accountList;
     }
 
     public boolean checkAccount(String accountNumber) throws SQLException {
