@@ -78,9 +78,17 @@ class AccountRepositoryTest {
     public void testList() {
     }
 
+    /*
     @Test
     public void testDelete() {
+        accountRepository.add(account);
+
+        accountRepository.delete(account);
+        String account1 = accountRepository.findById(account.getId());
+
+        assertNull(account1);
     }
+     */
 
     @BeforeEach
     public void openSession() {
