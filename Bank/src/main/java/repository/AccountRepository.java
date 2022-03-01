@@ -46,6 +46,20 @@ public class AccountRepository implements Repository<Account> {
         }
     }
 
+    public void delete(Account account) {
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.delete(account);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+
     public Account findByAccountNumber(String accountNumber) {
         try (var session = sessionFactory.openSession()) {
             NativeQuery query = session.createSQLQuery("SELECT * FROM Account WHERE accountnumber = :accountNumber");
