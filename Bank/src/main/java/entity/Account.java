@@ -9,6 +9,9 @@ import javax.persistence.*;
 
 
 import entity.enumoration.TypeAccount;
+
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -44,5 +47,18 @@ public class Account {
                 ", budget=" + budget +
                 ", typeAccount=" + typeAccount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(id, account.id) && Objects.equals(codeBranch, account.codeBranch) && Objects.equals(nationalId, account.nationalId) && Objects.equals(accountNumber, account.accountNumber) && Objects.equals(budget, account.budget) && typeAccount == account.typeAccount;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, codeBranch, nationalId, accountNumber, budget, typeAccount);
     }
 }
