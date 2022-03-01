@@ -78,6 +78,15 @@ class AccountRepositoryTest {
     public void testList() {
     }
 
+    @Test
+    public void testFindByAccountNumber(){
+        accountRepository.add(account);
+
+        Account newAccount = accountRepository.findByAccountNumber(account.getAccountNumber());
+
+        assertEquals(account,newAccount);
+    }
+
     /*
     @Test
     public void testDelete() {
