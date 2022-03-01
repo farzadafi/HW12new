@@ -44,7 +44,18 @@ public class AccountRepository implements Repository<Account> {
         }
     }
 
-
+    public void update(Account account) {
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.update(account);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
 
     public Account findByAccountNumber(String accountNumber) {
         try (var session = sessionFactory.openSession()) {
@@ -69,23 +80,6 @@ public class AccountRepository implements Repository<Account> {
 
     public int find(String input){
         return 0;
-    }
-
-
-    public void depositCard(Double amount,String accountNumber) throws SQLException {
-        String deposit = "UPDATE Account SET budget = budget-? WHERE accountnumber = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(deposit);
-        preparedStatement.setDouble(1,amount);
-        preparedStatement.setString(2,accountNumber);
-        preparedStatement.executeUpdate();
-    }
-
-    public void withdrawCard(Double amount,String accountNumber) throws SQLException {
-        String deposit = "UPDATE Account SET budget = budget+? WHERE accountnumber = ? ";
-        PreparedStatement preparedStatement = connection.prepareStatement(deposit);
-        preparedStatement.setDouble(1,amount);
-        preparedStatement.setString(2,accountNumber);
-        preparedStatement.executeUpdate();
     }
 
     public List<Account> showAllAccount(String nationalId) throws SQLException {

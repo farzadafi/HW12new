@@ -80,12 +80,9 @@ public class AccountService {
         return accountRepository.findById(id);
     }
 
-    public void depositCard(Double amount,String accountNumber) throws SQLException {
-        accountRepository.depositCard(amount,accountNumber);
-    }
 
-    public void withdrawCard(Double amount,String accountNumber) throws SQLException {
-        accountRepository.withdrawCard(amount,accountNumber);
+    public void update(Account account){
+        accountRepository.update(account);
     }
 
     public void showAccountForClerk() throws SQLException {
@@ -172,7 +169,9 @@ public class AccountService {
         }
         System.out.print("Enter amount for withdraw:");
         budget = input.nextDouble();
-        accountRepository.withdrawCard(budget,accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber);
+        Account newAccount = new Account(account.getId(),account.getCodeBranch(),account.getNationalId(),account.getAccountNumber(),(account.getBudget()+budget),account.getTypeAccount());
+        accountRepository.update(newAccount);
         LocalDate tempDate = LocalDate.now();
         Date date = Date.valueOf(tempDate);
         LocalTime tempTime = LocalTime.now();
