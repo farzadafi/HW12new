@@ -194,8 +194,11 @@ public class CreditCardService {
             System.out.println("How are you,you dont have this amount for Transfer!");
             return;
         }
-        accountService.depositCard(amount+600,accountNumber);
-        accountService.withdrawCard(amount,destinationAccount);
+        Account account1 = new Account(account.getId(),account.getCodeBranch(),account.getNationalId(),account.getAccountNumber(),(account.getBudget()-600-amount),account.getTypeAccount());
+        accountService.update(account1);
+        Account desAccount = accountService.findAccountNumber(destinationAccount);
+        account1 = new Account(desAccount.getId(),desAccount.getCodeBranch(),desAccount.getNationalId(),desAccount.getAccountNumber(),(desAccount.getBudget()+amount),desAccount.getTypeAccount());
+        accountService.update(account1);
         Transaction minesTransaction = new Transaction(accountNumber,originCardNumber,destinationCardNumber,String.valueOf(-amount),date,time, TypeTransaction.CARD_TO_CARD);
         transactionService.addTransaction(minesTransaction);
         Transaction feeTransaction = new Transaction(accountNumber,originCardNumber,destinationCardNumber,String.valueOf(-600),date,time, TypeTransaction.TRANSFER_FEE);
