@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerRepositoryTest {
@@ -36,6 +38,37 @@ class CustomerRepositoryTest {
         assertNotNull(sessionFactory);
     }
 
+    @Test
+    public void testAdd() {
+
+        Customer customer1 = customerRepository.findById(customer.getId());
+        assertAll(
+                () -> assertNotEquals(0,customer1.getId()),
+                () -> assertNotNull(customer1),
+                () -> assertEquals("399",customer1.getNationalId())
+        );
+    }
+
+
+
+
+
+
+
+
+
+
+    /*
+    @Test
+    public void testDelete() {
+       // accountRepository.add(account);
+
+        customerRepository.delete(customer.getId());
+        Customer customer1 = customerRepository.findById(customer.getId());
+
+        assertNull(customer1);
+    }
+     */
 
     @AfterEach
     public void closeSession() {
@@ -50,12 +83,10 @@ class CustomerRepositoryTest {
         System.out.println("SessionFactory destroyed");
     }
 
-    /*
     @AfterEach
     public void cleanUp() {
-        accountRepository.delete(account);
+        customerRepository.delete(customer.getId());
     }
-     */
 
 
 }
