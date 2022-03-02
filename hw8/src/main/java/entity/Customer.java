@@ -1,39 +1,33 @@
 package entity;
-//for test
 
-public class Customer extends User {
+import lombok.*;
+
+import javax.persistence.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@Entity
+@Table(name = "UserTable")
+public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false)
+    private String fullName;
+
+    @Column(nullable = false,length = 10)
+    private String nationalId;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private TypeUser typeUser;
+
     private String address;
     private Double balance;
 
-
-    public Customer(String fullName, String nationalId, String password, TypeUser typeUser,String address,Double balance) {
-        super(fullName, nationalId, password, typeUser);
-        this.address = address;
-        this.balance = balance;
-    }
-
-    public Customer(int id, String fullName, String nationalId, String password, TypeUser typeUser,String address,Double balance) {
-        super(id, fullName, nationalId, password, typeUser);
-        this.address = address;
-        this.balance = balance;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Double getBalance() {
-        return balance;
-    }
-
-    public void setBalance(Double balance) {
-        this.balance = balance;
-    }
-
-    public Customer() {
-    }
 }
