@@ -49,6 +49,17 @@ class CustomerRepositoryTest {
         );
     }
 
+    @Test
+    public void testUpdate() {
+
+        Customer customer1= new Customer(customer.getId(),"amin","499","499",TypeUser.CUSTOMER,"Iran",20000D);
+        customerRepository.update(customer1);
+        Customer customer2 = customerRepository.findById(customer1.getId());
+
+        assertEquals("499",customer2.getNationalId());
+    }
+
+
 
 
 
