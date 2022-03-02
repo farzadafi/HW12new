@@ -21,6 +21,7 @@ public class CustomerManager {
     private SaleProductService saleProductService = new SaleProductService();
     private String offCode;
     private List<String> offCodeList = new ArrayList<>();
+    private AdminService adminService= new AdminService();
 
 
     public void addCustomer() {
@@ -136,7 +137,15 @@ public class CustomerManager {
 
     public void addBudget(int id) {
         Double budget = utility.setPriceProduct("withdraw");
+        /*
         if (customerService.addBudget(id, budget) != 0)
+            System.out.println("This operation successful!");
+        else
+            System.out.println("Something is wrong!");
+         */
+        Customer newCustomer = customerService.findById(id);
+        newCustomer.setBalance(newCustomer.getBalance()+budget);
+        if(customerService.update(newCustomer) != 0)
             System.out.println("This operation successful!");
         else
             System.out.println("Something is wrong!");
@@ -183,9 +192,11 @@ public class CustomerManager {
                 SaleProduct saleProduct = new SaleProduct(cat.getCustomerId(), cat.getProductId(), cat.getNumber(),calcPrice(OffCodeCalc,cat.getTotalPrice()), date);
                 saleProductService.add(saleProduct);
                 adminId = productService.returnAdminId(cat.getProductId());
-                customerService.addBudget(adminId,cat.getTotalPrice());
+                adminService.addBudget(adminId,cat.getTotalPrice());
                 productService.minesNumberProduct(cat.getProductId(), cat.getNumber());
-                customerService.addBudget(id, -cat.getTotalPrice());
+                Customer newCustomer = customerService.findById(id);
+                newCustomer.setBalance(newCustomer.getBalance()-cat.getTotalPrice());
+                customerService.update(newCustomer);
                 customerBasketService.delete(customerBasketService.findIdBy(cat.getCustomerId(), cat.getProductId(), cat.getNumber()));
                 System.out.println(cat.getProductId() + " is successful added!");
             }
