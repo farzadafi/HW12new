@@ -100,17 +100,16 @@ class AccountRepositoryTest {
         assertEquals(account,newAccount);
     }
 
-    /*
     @Test
     public void testDelete() {
-        accountRepository.add(account);
+        Account account1 = new Account(null,"1112","1111111111","11112",111D, TypeAccount.ACTIVE);
+        accountRepository.add(account1);
 
-        accountRepository.delete(account);
-        String account1 = accountRepository.findById(account.getId());
+        accountRepository.delete(account1);
+        String codeBranch = accountRepository.findById(account1.getId());
 
-        assertNull(account1);
+        assertNull(codeBranch);
     }
-     */
 
     @BeforeEach
     public void openSession() {
