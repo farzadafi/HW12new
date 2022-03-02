@@ -10,6 +10,7 @@ public class CustomerService implements Service<Customer> {
     CustomerRepository customerRepository = new CustomerRepository();
 
 
+    /*
     @Override
     public int add(Customer customer) {
         try {
@@ -18,6 +19,14 @@ public class CustomerService implements Service<Customer> {
             System.out.println(exception.getMessage());
         }
         return 0;
+    }
+
+     */
+
+
+    @Override
+    public int add(Customer customer) {
+        return customerRepository.add(customer);
     }
 
     @Override

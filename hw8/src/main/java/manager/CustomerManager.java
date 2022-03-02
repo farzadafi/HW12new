@@ -35,7 +35,7 @@ public class CustomerManager {
         password = utility.setPassword();
         System.out.print("Enter your address:");
         address = input.nextLine();
-        Customer customer = new Customer(fullName, nationalId, password, TypeUser.CUSTOMER, address, 50000d);
+        Customer customer = new Customer(0,fullName, nationalId, password, TypeUser.CUSTOMER, address, 50000d);
         if (customerService.add(customer) != 0) {
             System.out.println(fullName + " successful added!");
         } else
