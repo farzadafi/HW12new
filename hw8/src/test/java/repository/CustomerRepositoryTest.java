@@ -85,29 +85,16 @@ class CustomerRepositoryTest {
             fail();
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
     @Test
     public void testDelete() {
-       // accountRepository.add(account);
+        Customer customer1 = new Customer(0,"farzad1","499","499", TypeUser.CUSTOMER,"Iran",20000D);
+        customerRepository.add(customer1);
 
-        customerRepository.delete(customer.getId());
-        Customer customer1 = customerRepository.findById(customer.getId());
+        customerRepository.delete(customer1.getId());
+        Customer customer2 = customerRepository.findById(customer1.getId());
 
-        assertNull(customer1);
+        assertNull(customer2);
     }
-     */
 
     @AfterEach
     public void closeSession() {
