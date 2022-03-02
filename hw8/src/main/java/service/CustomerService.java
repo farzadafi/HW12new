@@ -30,22 +30,8 @@ public class CustomerService implements Service<Customer> {
         return 0;
     }
 
-    public Double returnBudget(int id){
-        try {
-            return customerRepository.returnBudget(id);
-        }catch (SQLException exception){
-            System.out.println(exception.getMessage());
-        }
-        return  0d;
-    }
 
     public Customer findById(int id){
         return customerRepository.findById(id);
     }
-
-
-
-
-
-
 }
