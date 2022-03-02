@@ -35,6 +35,15 @@ public class AdminService implements Service<Admin> {
         return 0;
     }
 
+    public int addBudget(int id,Double amount){
+        try {
+            return adminRepository.addBudget(id,amount);
+        }catch (SQLException exception){
+            System.out.println(exception.getMessage());
+        }
+        return 0;
+    }
+
     @Override
     public int delete(int id) {
         return 0;
