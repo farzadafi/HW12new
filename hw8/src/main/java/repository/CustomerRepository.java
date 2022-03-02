@@ -96,7 +96,18 @@ public class CustomerRepository implements Repository<Customer> {
 
     @Override
     public int delete(int id) throws SQLException {
-        return 0;
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.delete(String.valueOf(Customer.class),id);
+                transaction.commit();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+
+        return 1;
     }
 
     public Customer findById(int id){
@@ -105,18 +116,4 @@ public class CustomerRepository implements Repository<Customer> {
             return customer;
         }
     }
-
-    public Double returnBudget(int id) throws SQLException {
-            String budget = "SELECT balance FROM UserTable WHERE id = ? ";
-            PreparedStatement preparedStatement = connection.prepareStatement(budget);
-            preparedStatement.setInt(1,id);
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if(resultSet.next())
-                return resultSet.getDouble("balance");
-            else
-                return 0d;
-    }
-
-
-
 }
