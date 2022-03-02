@@ -12,26 +12,19 @@ import java.util.List;
 public class AdminRepository implements Repository<Admin> {
     private Connection connection;
 
-    public AdminRepository() {
+    public AdminRepository(){
         try {
             this.connection = Singleton.getInstance().getConnection();
-            String CreateTable = "CREATE TABLE IF NOT EXISTS UserTable(id serial PRIMARY KEY," +
-                    "fullName varchar(50)," +
-                    "nationalId varchar(20) UNIQUE," +
-                    "password varchar(50)," +
-                    "kind varchar(50)," +
-                    "address varchar(100)," +
-                    "budget DECIMAL)";
-            PreparedStatement preparedStatement = connection.prepareStatement(CreateTable);
-            preparedStatement.execute();
-        }catch (SQLException | ClassNotFoundException exception){
-            System.out.println(exception.getMessage());
+        }catch (SQLException e ){
+            System.out.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public int add(Admin admin) throws SQLException {
-            String add = "INSERT INTO UserTable(fullName,nationalId,password,kind,address,budget) VALUES (?,?,?,?,?,?) ";
+            String add = "INSERT INTO UserTable(fullName,nationalId,password,typeuser,address,balance) VALUES (?,?,?,?,?,?) ";
             PreparedStatement preparedStatement = connection.prepareStatement(add);
             preparedStatement.setString(1, admin.getFullName());
             preparedStatement.setString(2, admin.getNationalId());
@@ -74,7 +67,7 @@ public class AdminRepository implements Repository<Admin> {
 
     @Override
     public int delete(int id) throws SQLException {
-            String del = "DELETE FROM UsetTable WHERE id = ? ";
+            String del = "DELETE FROM UserTable WHERE id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(del);
             preparedStatement.setInt(1,id);
             return preparedStatement.executeUpdate();
