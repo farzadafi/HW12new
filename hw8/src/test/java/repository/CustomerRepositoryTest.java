@@ -59,6 +59,16 @@ class CustomerRepositoryTest {
         assertEquals("499",customer2.getNationalId());
     }
 
+    @Test
+    public void testFindById() {
+
+        Customer customer1 =  customerRepository.findById(customer.getId());
+
+        assertNotNull(customer1);
+        assertEquals("399",customer1.getNationalId());
+    }
+
+
 
 
 
