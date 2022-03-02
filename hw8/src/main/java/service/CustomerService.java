@@ -36,12 +36,7 @@ public class CustomerService implements Service<Customer> {
 
     @Override
     public int update(Customer customer) {
-        try {
             return customerRepository.update(customer);
-        }catch (SQLException exception){
-            System.out.println(exception.getMessage());
-        }
-        return 0;
     }
 
     @Override
@@ -65,6 +60,10 @@ public class CustomerService implements Service<Customer> {
             System.out.println(exception.getMessage());
         }
         return  0d;
+    }
+
+    public Customer findById(int id){
+        return customerRepository.findById(id);
     }
 
 
