@@ -72,4 +72,12 @@ public class AdminRepository implements Repository<Admin> {
             preparedStatement.setInt(1,id);
             return preparedStatement.executeUpdate();
     }
+
+    public int addBudget(int id, Double amount) throws SQLException {
+        String deposit = "UPDATE UserTable SET balance = usertable.balance + ? where id = ? ";
+        PreparedStatement preparedStatement = connection.prepareStatement(deposit);
+        preparedStatement.setDouble(1,amount);
+        preparedStatement.setInt(2,id);
+        return preparedStatement.executeUpdate();
+    }
 }
