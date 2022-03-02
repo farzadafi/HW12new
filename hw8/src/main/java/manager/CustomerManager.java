@@ -43,11 +43,12 @@ public class CustomerManager {
     }
 
     public void editCustomer(int id) {
+        Customer newCustomer = customerService.findById(id);
         fullName = utility.setFullName();
         password = utility.setPassword();
         System.out.print("Enter your new address:");
         address = input.nextLine();
-        Customer customer = new Customer(id, fullName, null, password, null, address, null);
+        Customer customer = new Customer(id, fullName, newCustomer.getNationalId(), password, newCustomer.getTypeUser(), address, newCustomer.getBalance());
         if (customerService.update(customer) != 0) {
             System.out.println(fullName + " successful updated!");
         }
