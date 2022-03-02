@@ -95,11 +95,12 @@ public class CustomerRepository implements Repository<Customer> {
     }
 
     @Override
-    public int delete(int id) throws SQLException {
+    public int delete(int id) {
+        Customer customerDelete = findById(id);
         try (var session = sessionFactory.openSession()) {
             var transaction = session.beginTransaction();
             try {
-                session.delete(String.valueOf(Customer.class),id);
+                session.delete(customerDelete);
                 transaction.commit();
             } catch (Exception e) {
                 transaction.rollback();
