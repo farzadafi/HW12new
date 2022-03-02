@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,6 +68,23 @@ class CustomerRepositoryTest {
         assertNotNull(customer1);
         assertEquals("399",customer1.getNationalId());
     }
+
+    @Test
+    public void testList() {
+        Customer customer1 = new Customer(0,"farzad1","499","499", TypeUser.CUSTOMER,"Iran",20000D);
+        Customer customer2 = new Customer(0,"farzad2","599","599", TypeUser.CUSTOMER,"Iran",30000D);
+
+        customerRepository.add(customer1);
+        customerRepository.add(customer2);
+
+        List<Customer> customerList = customerRepository.findAll();
+        customerRepository.delete(customer1.getId());
+        customerRepository.delete(customer2.getId());
+
+        if(customerList.size() < 3 )
+            fail();
+    }
+
 
 
 
