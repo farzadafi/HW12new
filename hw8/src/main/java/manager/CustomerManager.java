@@ -176,7 +176,8 @@ public class CustomerManager {
         }
         Double OffCodeCalc = calcPriceWithOff();
         calcPriceProduct *= OffCodeCalc;
-        Double customerBudget = customerService.returnBudget(id);
+        Customer newCustomer = customerService.findById(id);
+        Double customerBudget = newCustomer.getBalance();
         if (calcPriceProduct > customerBudget) {
             System.out.println("You dont have enough budget!");
             return;
@@ -194,7 +195,6 @@ public class CustomerManager {
                 adminId = productService.returnAdminId(cat.getProductId());
                 adminService.addBudget(adminId,cat.getTotalPrice());
                 productService.minesNumberProduct(cat.getProductId(), cat.getNumber());
-                Customer newCustomer = customerService.findById(id);
                 newCustomer.setBalance(newCustomer.getBalance()-cat.getTotalPrice());
                 customerService.update(newCustomer);
                 customerBasketService.delete(customerBasketService.findIdBy(cat.getCustomerId(), cat.getProductId(), cat.getNumber()));
