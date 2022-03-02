@@ -1,6 +1,7 @@
 package repository;
 
 import entity.Customer;
+import org.hibernate.SessionFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +12,22 @@ import java.util.List;
 
 public class CustomerRepository implements Repository<Customer> {
     private Connection connection;
+    private final SessionFactory sessionFactory = SessionFactorySingleton.getInstance();
+
+    public int add(Customer customer){
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.save(customer);
+                transaction.commit();
+                return customer.getId();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
 
     public CustomerRepository() {
         try {
@@ -20,18 +37,6 @@ public class CustomerRepository implements Repository<Customer> {
         }
     }
 
-    @Override
-    public int add(Customer customer) throws SQLException {
-            String add = "INSERT INTO UserTable(fullName,nationalId,password,kind,address,budget) VALUES (?,?,?,?,?,?) ";
-            PreparedStatement preparedStatement = connection.prepareStatement(add);
-            preparedStatement.setString(1, customer.getFullName());
-            preparedStatement.setString(2, customer.getNationalId());
-            preparedStatement.setString(3, customer.getPassword());
-            preparedStatement.setString(4, String.valueOf(customer.getTypeUser()));
-            preparedStatement.setString(5, customer.getAddress());
-            preparedStatement.setDouble(6, customer.getBalance());
-            return preparedStatement.executeUpdate();
-    }
 
     @Override
     public List<Customer> findAll() throws SQLException {
@@ -46,7 +51,7 @@ public class CustomerRepository implements Repository<Customer> {
                     customer.setFullName(resultSet.getString("fullName"));
                     customer.setNationalId(resultSet.getString("nationalId"));
                     customer.setPassword(resultSet.getString("password"));
-                    customer.setBalance(resultSet.getDouble("budget"));
+                    customer.setBalance(resultSet.getDouble("balance"));
                     customer.setAddress(resultSet.getString("address"));
                     customerList.add(customer);
                 }
@@ -75,7 +80,7 @@ public class CustomerRepository implements Repository<Customer> {
     }
 
     public int addBudget(int id,Double amount) throws SQLException {
-            String deposit = "UPDATE UserTable SET budget = budget + ? where id = ? ";
+            String deposit = "UPDATE UserTable SET balance = usertable.balance + ? where id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(deposit);
             preparedStatement.setDouble(1,amount);
             preparedStatement.setInt(2,id);
@@ -83,12 +88,12 @@ public class CustomerRepository implements Repository<Customer> {
     }
 
     public Double returnBudget(int id) throws SQLException {
-            String budget = "SELECT budget FROM UserTable WHERE id = ? ";
+            String budget = "SELECT balance FROM UserTable WHERE id = ? ";
             PreparedStatement preparedStatement = connection.prepareStatement(budget);
             preparedStatement.setInt(1,id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next())
-                return resultSet.getDouble("budget");
+                return resultSet.getDouble("balance");
             else
                 return 0d;
     }
