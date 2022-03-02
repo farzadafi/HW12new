@@ -1,7 +1,9 @@
 package repository;
 
 import entity.Customer;
+import entity.User;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.NativeQuery;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,6 +40,7 @@ public class CustomerRepository implements Repository<Customer> {
     }
 
 
+    /*
     @Override
     public List<Customer> findAll() throws SQLException {
             String findAll = "SELECT * FROM UserTable" ;
@@ -59,7 +62,48 @@ public class CustomerRepository implements Repository<Customer> {
             } else
                 return null;
     }
+     */
 
+    @Override
+    public List<Customer> findAll(){
+            try (var session = sessionFactory.openSession()) {
+                NativeQuery query = session.createSQLQuery("SELECT * FROM Usertable");
+                query.addEntity(Customer.class);
+                List account = null;
+                try {
+                    account = query.list();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+                return account;
+            }
+        }
+
+    @Override
+    public int update(Customer customer) {
+        try (var session = sessionFactory.openSession()) {
+            var transaction = session.beginTransaction();
+            try {
+                session.update(customer);
+                transaction.commit();
+                return customer.getId();
+            } catch (Exception e) {
+                transaction.rollback();
+                throw e;
+            }
+        }
+    }
+
+    public Customer findById(int id){
+        try (var session = sessionFactory.openSession()) {
+            Customer customer = session.find(Customer.class,id);
+            return customer;
+        }
+    }
+
+
+
+    /*
     @Override
     public int update(Customer customer) throws SQLException {
             String update = "UPDATE UserTable SET fullName = ? , password = ? , address = ?  WHERE id = ? ";
@@ -70,6 +114,8 @@ public class CustomerRepository implements Repository<Customer> {
             preparedStatement.setInt(4,customer.getId());
             return preparedStatement.executeUpdate();
     }
+
+     */
 
     @Override
     public int delete(int id) throws SQLException {
