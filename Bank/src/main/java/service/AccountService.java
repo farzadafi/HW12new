@@ -151,7 +151,7 @@ public class AccountService {
         System.out.println("This account seccessful inactived!");
     }
 
-    public void DepositToAccount() throws SQLException, ClassNotFoundException {
+    public void DepositToAccount() {
             try {
                 System.out.print("Enter national Id customer:");
                 nationalId = input.nextLine();
@@ -183,7 +183,13 @@ public class AccountService {
         LocalTime tempTime = LocalTime.now();
         Time time = Time.valueOf(tempTime);
         Transaction plusTransaction = new Transaction(accountNumber,"Clerk","Clerk",String.valueOf(budget),date,time, TypeTransaction.CLERKWHITHDRAW);
-        transactionService = new TransactionService();
+        try {
+            transactionService = new TransactionService();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         transactionService.addTransaction(plusTransaction);
         System.out.println(budget + " successful added to account " + name);
     }
