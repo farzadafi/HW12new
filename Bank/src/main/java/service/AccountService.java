@@ -32,7 +32,7 @@ public class AccountService {
     }
 
     //::::>
-    public int addAccount(String nationalIdClerk) throws SQLException {
+    public int addAccount(String nationalIdClerk) {
         codeBranch = clerkService.findCodeBranch(nationalIdClerk);
         while(true){
             System.out.print("Enter nationalId(username):");
@@ -56,7 +56,7 @@ public class AccountService {
         return 1;
     }
 
-    public void showAccountForCustomer(String nationalIdCustomer) throws SQLException {
+    public void showAccountForCustomer(String nationalIdCustomer) {
         check = true;
         List<Account> accountList = accountRepository.showAllAccount(nationalIdCustomer);
         if(accountList.isEmpty()) {
@@ -72,11 +72,11 @@ public class AccountService {
         }
     }
 
-    public Account findAccountNumber(String number) throws SQLException {
+    public Account findAccountNumber(String number) {
         return accountRepository.findByAccountNumber(number);
     }
 
-    public String returnAccountNumber(int id) throws SQLException {
+    public String returnAccountNumber(int id) {
         return accountRepository.findById(id);
     }
 
@@ -85,7 +85,7 @@ public class AccountService {
         accountRepository.update(account);
     }
 
-    public void showAccountForClerk() throws SQLException {
+    public void showAccountForClerk() {
         check = true;
         System.out.print("Enter national Id Customer:");
         nationalId = input.nextLine();
@@ -111,7 +111,7 @@ public class AccountService {
         return check;
     }
 
-    public boolean checkAccount(String numberAccount) throws SQLException {
+    public boolean checkAccount(String numberAccount) {
         Account account = accountRepository.findByAccountNumber(numberAccount);
         if(account.getTypeAccount() == TypeAccount.ACTIVE)
             return true;
@@ -119,7 +119,7 @@ public class AccountService {
             return false;
     }
 
-    public void setInactiveAccount() throws SQLException {
+    public void setInactiveAccount() {
         System.out.print("Enter nationalId customer:");
         nationalId = input.nextLine();
         String name = customerService.findName(nationalId);
@@ -197,7 +197,7 @@ public class AccountService {
         }
     }
 
-    public void setInactiveAccountForBoss() throws SQLException {
+    public void setInactiveAccountForBoss()  {
         System.out.print("Enter nationalId customer:");
         nationalId = input.nextLine();
         String name = customerService.findName(nationalId);

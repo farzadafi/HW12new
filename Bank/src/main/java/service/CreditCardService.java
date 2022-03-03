@@ -25,11 +25,12 @@ public class CreditCardService {
     private LoginService loginService = new LoginService();
     private CreditCardRepository creditCardRepository = new CreditCardRepository();
     private TransactionService transactionService = new TransactionService();
+    private int result = 0;
 
     public CreditCardService() throws SQLException, ClassNotFoundException {
     }
 
-    public int addCard() throws SQLException {
+    public int addCard() {
         while(true){
             System.out.print("Enter national Id customer(cancel):");
             nationalId = input.nextLine();
@@ -55,14 +56,24 @@ public class CreditCardService {
             System.out.println("this account number is not define!");
             return 0;
         }
-        if( creditCardRepository.findActiveCard(accountNumber) == 1 ){
+        try {
+            result = creditCardRepository.findActiveCard(accountNumber);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if( result == 1 ){
             System.out.println("This account you enter have an active card!");
             return 0;
         }
 
         while(true){
             cardNumber = String.valueOf(random.nextLong(111111111111L,999999999999L));
-            if( creditCardRepository.find(cardNumber) == 0 )
+            try {
+                result = creditCardRepository.find(cardNumber);
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
+            if( result == 0 )
                 break;
         }
         cvv2 = String.valueOf(random.nextInt(1111,9999));
@@ -70,14 +81,23 @@ public class CreditCardService {
         int month = java.time.LocalDate.now().getMonthValue();
         expireDate = (String.valueOf(year)) + "-" + (String.valueOf(month));
         CreditCard newCreditCard = new CreditCard(accountNumber,cardNumber,cvv2,expireDate, TypeAccount.ACTIVE);
-        creditCardRepository.add(newCreditCard);
+        try {
+            creditCardRepository.add(newCreditCard);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         return 1;
     }
 
     //::::>
-    public void setPassword(String nationalIdCustomer) throws SQLException {
-        String[] result = creditCardRepository.show(nationalIdCustomer);
-        if( result == null){
+    public void setPassword(String nationalIdCustomer) {
+        String[] resultString = new String[0];
+        try {
+            resultString = creditCardRepository.show(nationalIdCustomer);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if( resultString == null){
             System.out.println("You dont have any card!");
             return;
         }
@@ -85,10 +105,10 @@ public class CreditCardService {
         System.out.print("Please select number for set password:");
         number = input.nextLine();
         boolean equal = false;
-        for(int i=0;i<result.length;i++) {
-            if (result[i] == null)
+        for(int i=0;i<resultString.length;i++) {
+            if (resultString[i] == null)
                 break;
-            if (result[i].equals(number)) {
+            if (resultString[i].equals(number)) {
                 equal = true;
                 break;
             }
@@ -99,14 +119,23 @@ public class CreditCardService {
         }
         System.out.print("Enter password for set:");
         String password = input.nextLine();
-        creditCardRepository.setPassword(Integer.parseInt(number),password);
+        try {
+            creditCardRepository.setPassword(Integer.parseInt(number),password);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         System.out.println("set password for " + number + "  ID cared successful!");
     }
 
     //::::>
-    public void cardToCard(String nationalIdCustomer) throws SQLException {
-        String[] result = creditCardRepository.show(nationalIdCustomer);
-        if (result == null) {
+    public void cardToCard(String nationalIdCustomer) {
+        String[] resultString = new String[0];
+        try {
+            resultString = creditCardRepository.show(nationalIdCustomer);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if (resultString == null) {
             System.out.println("You dont have any card,Please call to clerk bank!");
             return;
         }
@@ -114,10 +143,10 @@ public class CreditCardService {
         System.out.print("Please select number card for transfer money:");
         number = input.nextLine();
         boolean equal = false;
-        for (int i = 0; i < result.length; i++) {
-            if (result[i] == null)
+        for (int i = 0; i < resultString.length; i++) {
+            if (resultString[i] == null)
                 break;
-            if (result[i].equals(number)) {
+            if (resultString[i].equals(number)) {
                 equal = true;
                 break;
             }
@@ -126,18 +155,23 @@ public class CreditCardService {
             System.out.println("We dont have any card with this number,please open your eyes!");
             return;
         }
-        String[] result2 = creditCardRepository.returnInformationCard(Integer.parseInt(number));
-        if(result2[2] == null){
+        String[] resultString2 = new String[0];
+        try {
+            resultString2 = creditCardRepository.returnInformationCard(Integer.parseInt(number));
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(resultString2[2] == null){
             System.out.println("For this card is not define password,Please define password for it and try again!");
             return;
         }
-        accountNumber = result2[0];
+        accountNumber = resultString2[0];
         if(!accountService.checkAccount(accountNumber)){
             System.out.println("This account is not Active!");
             return;
         }
-        originCardNumber = result2[1];
-        password = result2[2];
+        originCardNumber = resultString2[1];
+        password = resultString2[2];
         String tempPassword;
         int numberFalse = 0;
         while(true){
@@ -151,7 +185,11 @@ public class CreditCardService {
                     System.out.println("You enter " + numberFalse + " time false password");
                 if(numberFalse == 3 ){
                     System.out.println("You enter 3 time incorrect password and I eat your card!(call to clerk)");
-                    creditCardRepository.setInactiveCard(Integer.parseInt(number));
+                    try {
+                        creditCardRepository.setInactiveCard(Integer.parseInt(number));
+                    }catch (SQLException e){
+                        System.out.println(e.getMessage());
+                    }
                     return;
                     }
                 }
@@ -159,23 +197,34 @@ public class CreditCardService {
         }
         System.out.print("Enter Expire date of your card:");
         expireDate = input.nextLine();
-        if( !expireDate.equals(result2[3])){
+        if( !expireDate.equals(resultString2[3])){
             System.out.println("You enter a wrong Expire Date");
             return;
         }
         System.out.print("Enter cvv2 of your card:");
         cvv2 = input.nextLine();
-        if( !cvv2.equals(result2[4])){
+        if( !cvv2.equals(resultString2[4])){
             System.out.println("You enter a wrong cvv2");
             return;
         }
         System.out.print("Enter Destination number card:");
         destinationCardNumber = input.nextLine();
-        if( !creditCardRepository.checkCardNumber(destinationCardNumber)) {
+        boolean check = false;
+        try {
+            check = creditCardRepository.checkCardNumber(destinationCardNumber);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if( !check) {
             System.out.println("This number card is incorrect!");
             return;
         }
-        String destinationAccount = creditCardRepository.returnAccountNumber(destinationCardNumber);
+        String destinationAccount = null;
+        try {
+            destinationAccount = creditCardRepository.returnAccountNumber(destinationCardNumber);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         if( !accountService.checkAccount(destinationAccount)){
             System.out.println("This account number is inactive!");
             return;
@@ -208,7 +257,7 @@ public class CreditCardService {
         System.out.println("This card to card is successful!");
     }
 
-    public void showCardForClerk() throws SQLException {
+    public void showCardForClerk() {
         System.out.print("Enter national Id customer:");
         nationalId = input.nextLine();
         String name = customerService.findName(nationalId);
@@ -223,7 +272,12 @@ public class CreditCardService {
         }
         System.out.print("Enter account number for view card:");
         accountNumber = input.nextLine();
-        List<CreditCard> creditCardList = creditCardRepository.findAllCard(accountNumber);
+        List<CreditCard> creditCardList = null;
+        try {
+            creditCardList = creditCardRepository.findAllCard(accountNumber);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         for (CreditCard creditCard : creditCardList)
         {
             System.out.println(creditCard.toString());

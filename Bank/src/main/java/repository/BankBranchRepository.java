@@ -23,7 +23,7 @@ public class BankBranchRepository implements Repository<BankBranch> {
     }
 
     @Override
-    public int add(BankBranch bankBranch) throws SQLException {
+    public int add(BankBranch bankBranch)throws SQLException {
         String insertBank = "INSERT INTO BankBranch (nameBank,codeBranch,BossfullName,nationalId,password) VALUES (?, ?, ?, ?, ?) ";
         PreparedStatement preparedStatement = connection.prepareStatement(insertBank);
         preparedStatement.setString(1,bankBranch.getNameBank());

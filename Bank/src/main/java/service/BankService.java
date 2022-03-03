@@ -14,21 +14,36 @@ public class BankService {
     public BankService() throws SQLException, ClassNotFoundException {
     }
 
-    //::::>
-    public int addBank() throws SQLException {
+    //::::k>
+    public int addBank() {
         System.out.print("Please enter you name Bank:");
         nameBank = input.nextLine();
-        if( bankRepository.find(nameBank) == 1 )
+        int result = 0;
+        try {
+            bankRepository.find(nameBank);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        if(result == 1 )
             return 1;
         else{
             Bank bank = new Bank(nameBank);
-            bankRepository.add(bank);
+            try {
+                bankRepository.add(bank);
+            }catch (SQLException e){
+                System.out.println(e.getMessage());
+            }
             return 2;
         }
     }
 
-    public int findBankName(String name) throws SQLException {
-        return bankRepository.find(name);
+    public int findBankName(String name) {
+        try {
+            return bankRepository.find(name);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return 0;
     }
 
 

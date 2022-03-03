@@ -19,7 +19,7 @@ public class CustomerService {
 
 
     //::::>
-    public String addCustomer(String nationalIdClerk) throws SQLException {
+    public String addCustomer(String nationalIdClerk) {
         codeBranch = clerkService.findCodeBranch(nationalIdClerk);
         System.out.print("Enter full Name customer:");
         fullName = input.nextLine();
@@ -35,14 +35,23 @@ public class CustomerService {
         System.out.print("Enter password for " + fullName + " :");
         password = input.nextLine();
         Customer newClerk = new Customer(fullName,nationalId,codeBranch,password, TypeUser.CUSTOMER);
-        customerRepository.add(newClerk);
+        try {
+            customerRepository.add(newClerk);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         loginService.addNewLogin(nationalId,password,TypeUser.CUSTOMER);
         return fullName;
     }
 
     //::::>
-    public String findName(String nationalId) throws SQLException {
-        return customerRepository.findName(nationalId);
+    public String findName(String nationalId) {
+        try {
+            return customerRepository.findName(nationalId);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return "null";
+        }
     }
 
 

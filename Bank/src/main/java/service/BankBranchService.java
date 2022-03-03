@@ -18,23 +18,30 @@ public class BankBranchService {
     }
 
     //::::>
-    public int addBankBranch() throws SQLException {
+    public int addBankBranch() {
         System.out.print("Enter bank name:");
         nameBank = input.nextLine();
-        if( bankService.findBankName(nameBank) == 0 ) {
-            return 1;
-        }
+            if( bankService.findBankName(nameBank) == 0 ) {
+                return 1;
+            }
         System.out.print("Enter code Branch:");
         codeBranch = input.nextLine();
-        if( bankBranchRepository.find(codeBranch) == 1 ){
-            return 2;
+        try {
+            if( bankBranchRepository.find(codeBranch) == 1 ){
+                return 2;
+            }    
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
         }
+        
         System.out.print("Enter boss full name:");
         bossFullName = input.nextLine();
         while(true){
             System.out.print("Enter your national Id(username):");
             nationalId = input.nextLine();
-            if( loginService.findNationalId(nationalId) == 1 ) {
+            int result = 0;
+                result = loginService.findNationalId(nationalId);
+            if(result == 1 ) {
                 System.out.println("you enter a wrong national id");
                 continue;
             }
@@ -45,13 +52,22 @@ public class BankBranchService {
         password = input.nextLine();
         loginService.addNewLogin(nationalId,password, TypeUser.BOSS);
         BankBranch newBankBranch = new BankBranch(nameBank,codeBranch,bossFullName,nationalId,password);
-        bankBranchRepository.add(newBankBranch);
+        try {
+            bankBranchRepository.add(newBankBranch);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         return 3;
     }
 
     //::::>
-    public String findCodeBranch(String nationalId) throws SQLException {
-        return bankBranchRepository.findCodeBranch(nationalId);
+    public String findCodeBranch(String nationalId) {
+        try {
+            return bankBranchRepository.findCodeBranch(nationalId);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
 

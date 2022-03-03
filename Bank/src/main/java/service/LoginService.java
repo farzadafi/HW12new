@@ -13,18 +13,32 @@ public class LoginService {
     }
 
     //::::>
-    public int findNationalId(String nationalId) throws SQLException {
-        return loginRepository.find(nationalId);
+    public int findNationalId(String nationalId) {
+        try {
+            return loginRepository.find(nationalId);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return 0;
+        }
     }
 
     //::::>
-    public void addNewLogin(String username, String password, TypeUser typeUser) throws SQLException {
+    public void addNewLogin(String username, String password, TypeUser typeUser) {
         Login login = new Login(username,password,typeUser);
-        loginRepository.add(login);
+        try {
+            loginRepository.add(login);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
-    public String findLogin(String username,String password) throws SQLException {
-        return loginRepository.findLogin(username,password);
+    public String findLogin(String username,String password) {
+        try {
+            return loginRepository.findLogin(username,password);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
 }//

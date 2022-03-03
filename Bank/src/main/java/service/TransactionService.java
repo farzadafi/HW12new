@@ -19,11 +19,15 @@ public class TransactionService {
     public TransactionService() throws SQLException, ClassNotFoundException {
     }
 
-    public void addTransaction(Transaction transaction) throws SQLException {
-        transactionRepository.add(transaction);
+    public void addTransaction(Transaction transaction) {
+        try {
+            transactionRepository.add(transaction);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
     
-    public void showTransaction(String nationalIdCustomer) throws SQLException {
+    public void showTransaction(String nationalIdCustomer) {
         String name = customerService.findName(nationalIdCustomer);
         System.out.println(name + " dear you have this account:");
         accountService.showAccountForCustomer(nationalIdCustomer);
@@ -46,7 +50,12 @@ public class TransactionService {
             System.out.println("You enter a date after now!");
             return;
         }
-        List<Transaction> transactionList = transactionRepository.findAllTransaction(accountNumber,date1);
+        List<Transaction> transactionList = null;
+        try {
+            transactionList = transactionRepository.findAllTransaction(accountNumber,date1);
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
         if( transactionList.isEmpty() ){
             System.out.println("This account doesn't have any any Transaction!");
             return;
